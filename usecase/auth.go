@@ -1,5 +1,11 @@
 package usecase
 
+// import (
+// 	"api_gateway/handler"
+
+// 	"github.com/gin-gonic/gin"
+// )
+
 type LoginInterface interface {
 	Autentikasi(username string, password string) bool
 }
@@ -19,3 +25,9 @@ func NewLogin(username, password string) LoginInterface {
 func (a *Login) Autentikasi(username string, password string) bool {
 	return username == a.validUsername && password == a.validPassword
 }
+
+// func auth() {
+// 	r := gin.Default()
+// 	accountRoute := r.Group("/auth")
+// 	accountRoute.POST("/create", handler.NewAuth().LoginAuth)
+// }
