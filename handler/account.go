@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"api_gateway/usecase"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,19 +10,21 @@ type AccountInterface interface {
 	GetAccount(*gin.Context)
 	CreateAccount(*gin.Context)
 	UpdateAccount(*gin.Context)
-	DeleteAccount(*gin.Context)
+	RemoveAccount(*gin.Context)
+	GetBalance(*gin.Context)
 }
 
 type accountImplement struct{}
 
-// func NewAccount() AccountInterface {
-// 	 return &accountImplement{}
-// }
+func NewAccount() AccountInterface {
+	return &accountImplement{}
+}
 
-func (a *accountImplement) AccountAuth(g *gin.Context) {
-	queryParam := g.Request.URL.Query()
+func (a *accountImplement) GetAccount(g *gin.Context) {
 
-	name := queryParam.Get("name")
+	QueryParam := g.Request.URL.Query()
+
+	name := QueryParam.Get("name")
 
 	g.JSON(http.StatusOK, gin.H{
 		"message": "Get account successfully",
@@ -37,24 +38,26 @@ type BodyPayloadAccount struct {
 	Address   string
 }
 
-func (a *accountImplement) CreateAuth(g *gin.Context) {
-	bodyPayload := BodyPayloadAccount{}
+func (a *accountImplement) CreateAccount(g *gin.Context) {
 
-	err := g.BindJSON(&bodyPayload)
+	BodyPayload := BodyPayloadAccount{}
+	err := g.BindJSON(&BodyPayload)
+
 	if err != nil {
 		g.AbortWithError(http.StatusBadRequest, err)
 	}
 
 	g.JSON(http.StatusOK, gin.H{
-		"message": "Post account successfully",
-		"data":    bodyPayload,
+		"message": "Get account successfully",
+		"data":    BodyPayload,
 	})
 }
 
 func (a *accountImplement) UpdateAccount(g *gin.Context) {
-	queryParam := g.Request.URL.Query()
 
-	name := queryParam.Get("name")
+	QueryParam := g.Request.URL.Query()
+
+	name := QueryParam.Get("name")
 
 	g.JSON(http.StatusOK, gin.H{
 		"message": "Get account successfully",
@@ -62,51 +65,28 @@ func (a *accountImplement) UpdateAccount(g *gin.Context) {
 	})
 }
 
-func (a *accountImplement) DeleteAccount(g *gin.Context) {
-	queryParam := g.Request.URL.Query()
+func (a *accountImplement) RemoveAccount(g *gin.Context) {
 
-	id := queryParam.Get("id")
+	id := g.Param("id")
 
 	g.JSON(http.StatusOK, gin.H{
-		"message": "Delete account successfully",
+		"message": "Account removed successfully",
 		"data":    id,
 	})
 }
 
-type BalanceInterface interface {
-	BalanceAuth(*gin.Context)
-}
+type BodyPayloadBalance struct{}
 
-type BalanceImplement struct{}
+func (a *accountImplement) GetBalance(g *gin.Context) {
 
-type BalancePayloadAccount struct {
-	Username string
-	Password string
-}
+	bodyPayloadBal := BodyPayloadBalance{}
+	err := g.BindJSON(&bodyPayloadBal)
 
-func NewBalance() BalanceInterface {
-	return &BalanceImplement{}
-}
-
-func (a *BalanceImplement) BalanceAuth(g *gin.Context) {
-	bodyPayload := BalancePayloadAccount{}
-
-	err := g.BindJSON(&bodyPayload)
 	if err != nil {
-		g.JSON(http.StatusUnauthorized, gin.H{
-			"message": "anda gagal login",
-		})
+		g.AbortWithError(http.StatusBadRequest, err)
 	}
 
-	if usecase.NewLogin("veha", "password").Autentikasi(bodyPayload.Username, bodyPayload.Password) {
-		g.JSON(http.StatusOK, gin.H{
-			"message": "Anda berhasil login",
-			"data":    bodyPayload,
-		})
-	} else {
-		g.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Anda gagal login",
-			"data":    bodyPayload,
-		})
-	}
+	g.JSON(http.StatusOK, gin.H{
+		"message": "Hello guys this API rest for later",
+	})
 }

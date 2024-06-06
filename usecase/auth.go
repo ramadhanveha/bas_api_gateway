@@ -1,33 +1,18 @@
 package usecase
 
-// import (
-// 	"api_gateway/handler"
-
-// 	"github.com/gin-gonic/gin"
-// )
+type Login struct{}
 
 type LoginInterface interface {
-	Autentikasi(username string, password string) bool
+	Autentikasi(Username, Password string) bool
 }
 
-type Login struct {
-	validUsername string
-	validPassword string
+func NewLogin() LoginInterface {
+	return &Login{}
 }
 
-func NewLogin(username, password string) LoginInterface {
-	return &Login{
-		validUsername: username,
-		validPassword: password,
+func (masuk *Login) Autentikasi(Username, Password string) bool {
+	if Username == "admin" && Password == "admin123" {
+		return true
 	}
+	return false
 }
-
-func (a *Login) Autentikasi(username string, password string) bool {
-	return username == a.validUsername && password == a.validPassword
-}
-
-// func auth() {
-// 	r := gin.Default()
-// 	accountRoute := r.Group("/auth")
-// 	accountRoute.POST("/create", handler.NewAuth().LoginAuth)
-// }

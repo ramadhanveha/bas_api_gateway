@@ -1,13 +1,14 @@
 package handler
 
 import (
+	"api_gateway/usecase"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type AuthInterface interface {
-	LoginAuth(*gin.Context)
+	Login(*gin.Context)
 }
 
 type authImplement struct{}
@@ -16,41 +17,27 @@ func NewAuth() AuthInterface {
 	return &authImplement{}
 }
 
-type AuthPayloadAccount struct {
+type BodyPayloadAuth struct {
 	Username string
 	Password string
 }
 
-func (a *authImplement) LoginAuth(g *gin.Context) {
-	bodyPayload := AuthPayloadAccount{}
+func (a *authImplement) Login(g *gin.Context) {
 
-	err := g.BindJSON(&bodyPayload)
-	if err != nil {
+	bodyPayloadAuth := BodyPayloadAuth{}
+	err := g.BindJSON(&bodyPayloadAuth)
+
+	usecase.NewLogin().Autentikasi(bodyPayloadAuth.Username, bodyPayloadAuth.Password)
+
+	if usecase.NewLogin().Autentikasi(bodyPayloadAuth.Username, bodyPayloadAuth.Password) {
+		g.JSON(http.StatusOK, gin.H{
+			"message": "Anda berhasil login",
+			"data":    bodyPayloadAuth,
+		})
+	} else {
 		g.JSON(http.StatusUnauthorized, gin.H{
-			"message": "anda gagal login",
+			"message": "Anda gagal login",
+			"data":    err,
 		})
 	}
-
-	g.JSON(http.StatusOK, gin.H{
-		"message": "anda berhasil login",
-		"data":    bodyPayload,
-	})
-
 }
-
-// func (a *Implement) TransactionAuth(g *gin.Context) {
-// 	bodyPayload := AuthPayloadAccount{}
-
-// 	err := g.BindJSON(&bodyPayload)
-// 	if err != nil {
-// 		g.JSON(http.StatusUnauthorized, gin.H{
-// 			"message": "anda gagal login",
-// 		})
-// 	}
-
-// 	g.JSON(http.StatusOK, gin.H{
-// 		"message": "anda berhasil login",
-// 		"data":    bodyPayload,
-// 	})
-
-// }
