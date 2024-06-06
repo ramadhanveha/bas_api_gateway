@@ -40,8 +40,9 @@ func main() {
 	transactionRoute.POST("/transfer-bank", handler.NewTransaction().CreateTransaction)
 	transactionRoute.GET("/get", func(g *gin.Context) {
 		ClientResponse, err := proto.NewServiceTransactionService("service-transaction",
-			srvTransaction.Client()).Call(context.Background(), &proto.CallRequest{
-			Name: "Lupi",
+			srvTransaction.Client()).Login(context.Background(), &proto.LoginRequest{
+			Username: "Veha",
+			Password: "123",
 		}, addrServiceTransactionOpt)
 		if err != nil {
 			g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
