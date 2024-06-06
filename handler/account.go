@@ -166,8 +166,8 @@ func (a *accountImplement) GetBalance(g *gin.Context) {
 
 	defer db.Close()
 
-	orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("").First(&sumResult)
-	q := orm
+	q := orm.Model(&model.Transaction{}).Select("sum(amount) as total").Where("").First(&sumResult)
+
 	result := q.Find(&transaction)
 	if result.Error != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
