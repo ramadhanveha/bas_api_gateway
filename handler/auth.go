@@ -31,12 +31,12 @@ func (a *authImplement) Login(g *gin.Context) {
 
 	if usecase.NewLogin().Autentikasi(bodyPayloadAuth.Username, bodyPayloadAuth.Password) {
 		g.JSON(http.StatusOK, gin.H{
-			"message": "Anda berhasil login",
+			"message": "berhasil login",
 			"data":    bodyPayloadAuth,
 		})
 	} else {
 		g.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Anda gagal login",
+			"message": "gagal login",
 			"data":    err,
 		})
 	}

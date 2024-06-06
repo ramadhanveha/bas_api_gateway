@@ -13,11 +13,12 @@ func main() {
 	accountRoute.GET("/get", handler.NewAccount().GetAccount)
 	accountRoute.POST("/create", handler.NewAccount().CreateAccount)
 	accountRoute.PATCH("/update/:id", handler.NewAccount().UpdateAccount)
-	accountRoute.DELETE("/remove/:id", handler.NewAccount().RemoveAccount)
-	accountRoute.POST("/getbalance", handler.NewAccount().GetBalance)
+	accountRoute.DELETE("/delete/:id", handler.NewAccount().DeleteAccount)
+	accountRoute.GET("/balance", handler.NewAccount().GetBalance)
 
 	transactionRoute := r.Group("/transaction")
 	transactionRoute.POST("/transferbank", handler.NewTransaction().TransferBank)
+	transactionRoute.POST("/transfer-bank", handler.NewTransaction().CreateTransaction)
 
 	authRoute := r.Group("/auth")
 	authRoute.POST("/login", handler.NewAuth().Login)
